@@ -1,6 +1,7 @@
 package com.example.uberauthservice.dto;
 
 
+import com.example.uberauthservice.models.Passenger;
 import lombok.*;
 
 import java.util.Date;
@@ -11,7 +12,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PassengerDto {
-    private String id;
+    private Long id;
     private String name;
 
     private String email;
@@ -21,4 +22,16 @@ public class PassengerDto {
     private String phoneNumber;
 
     private Date createdAt;
+
+    public static PassengerDto from(Passenger p){
+        PassengerDto result=PassengerDto.builder()
+                .id(p.getId())
+                .createdAt(p.getCreatedAt())
+                .name(p.getName())
+                .email(p.getEmail())
+                .password(p.getPassword())
+                .phoneNumber(p.getPhoneNumber())
+                .build();
+        return result;
+    }
 }
