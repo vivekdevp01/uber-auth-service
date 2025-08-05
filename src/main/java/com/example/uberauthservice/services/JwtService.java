@@ -25,7 +25,7 @@ public class JwtService implements CommandLineRunner {
     @Value("${jwt.secret}")
     private String SECRET;
 
-    private String createToken(Map<String,Object> payload,String email){
+    public String createToken(Map<String,Object> payload,String email){
         Date now=new Date();
         Date expiryDate=new Date(now.getTime() + expiry*1000L);
 //        SecretKey key= Keys.hmacShaKeyFor(SECRET.getBytes(StandardCharsets.UTF_8));
@@ -38,7 +38,7 @@ public class JwtService implements CommandLineRunner {
                 .compact();
 
     }
-    private Claims extractAllPayloads(String token){
+    public Claims extractAllPayloads(String token){
 //        SecretKey key= Keys.hmacShaKeyFor(SECRET.getBytes(StandardCharsets.UTF_8));
       return Jwts
               .parser()
@@ -52,26 +52,29 @@ public class JwtService implements CommandLineRunner {
         return claimResolver.apply(claims);
     }
 
-    private Date extractExpiration(String token){
+    public Date extractExpiration(String token){
         return extractClaim(token, Claims::getExpiration);
     }
-    private String extractEmail(String token){
+    public String extractEmail(String token){
         return extractClaim(token, Claims::getSubject);
     }
 
-    private Boolean isTokenExpired(String token){
+    public Boolean isTokenExpired(String token){
         return extractExpiration(token).before(new Date());
 
     }
-    private Key getSignKey(){
+    public Key getSignKey(){
         return  Keys.hmacShaKeyFor(SECRET.getBytes(StandardCharsets.UTF_8));
     }
-    private Boolean validateToken(String token,String email){
+    public Boolean validateToken(String token,String email){
         final String userEmailFetchFromToken=extractEmail(token);
         return (userEmailFetchFromToken.equals(email)&& !isTokenExpired(token));
     }
 
-    private String extractPayload(String token,String payloadKey){
+    public String createToken(String email){
+        return createToken(new HashMap<>(),email);
+    }
+    public String extractPayload(String token,String payloadKey){
        Claims claim=extractAllPayloads(token);
       return claim.get(payloadKey).toString();
     }
