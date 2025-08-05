@@ -5,6 +5,8 @@ import com.example.uberauthservice.dto.PassengerDto;
 import com.example.uberauthservice.dto.PassengerSignupRequestDto;
 import com.example.uberauthservice.services.AuthService;
 import com.example.uberauthservice.services.JwtService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
@@ -67,7 +69,15 @@ public class AuthController {
         throw new UsernameNotFoundException("User not found");
         }
     }
-
+//    public String getCookie
+  @GetMapping("/validate")
+    public ResponseEntity<?> validate(HttpServletRequest request) {
+        System.out.println("inside validate");
+        for(Cookie cookie:request.getCookies()){
+            System.out.println("hello "+cookie.getName()+":    "+cookie.getValue());
+        }
+     return new ResponseEntity<>(HttpStatus.OK);
+  }
 
 
 }
